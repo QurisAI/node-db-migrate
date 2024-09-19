@@ -15,10 +15,10 @@ var APIHooks = {
   },
   'init:api:accessapi:hook': function (cb) {
     return this;
-  }
+  },
 };
 
-function dbmigrate (plugins, isModule, options, callback) {
+function dbmigrate(plugins, isModule, options, callback) {
   if (!options.staticLoader) load = require('./lib/commands');
   else load = require('./lib/commands/generated.js');
 
@@ -30,7 +30,7 @@ function dbmigrate (plugins, isModule, options, callback) {
   this.internals = {
     onComplete: onComplete,
     migrationProtocol: 1,
-    load
+    load,
   };
   if (typeof isModule !== 'function') {
     this.internals.isModule = isModule;
@@ -50,7 +50,7 @@ function dbmigrate (plugins, isModule, options, callback) {
   if (config.dotenvCustomPath) {
     dotenvConfig.path = config.dotenvCustomPath;
   }
-  dotenv.load(dotenvConfig);
+  dotenv.config(dotenvConfig);
 
   /* $lab:coverage:off$ */
   if (!options || !options.throwUncatched) load('helper/register-events')();
@@ -80,7 +80,7 @@ function dbmigrate (plugins, isModule, options, callback) {
 
   this.config = load('helper/load-config')(
     require('./lib/config.js'),
-    this.internals
+    this.internals,
   );
 
   // delayed loading of bluebird
@@ -88,7 +88,7 @@ function dbmigrate (plugins, isModule, options, callback) {
   this.internals.migrationOptions = {
     dbmigrate: {
       version: this.internals.dbm.version,
-      dataType: this.internals.dbm.dataType
+      dataType: this.internals.dbm.dataType,
     },
     dryRun: this.internals.dryRun,
     cwd: this.internals.cwd,
@@ -97,7 +97,7 @@ function dbmigrate (plugins, isModule, options, callback) {
     type: this.internals.dbm.dataType,
     log: log,
     ignoreOnInit: this.internals.argv['ignore-on-init'],
-    Promise: Promise
+    Promise: Promise,
   };
   this.internals.safeOptions = this.internals.migrationOptions;
 }
@@ -210,7 +210,7 @@ dbmigrate.prototype = {
     }
 
     return Promise.resolve(executeUp(this.internals, this.config)).nodeify(
-      callback
+      callback,
     );
   },
 
@@ -241,7 +241,7 @@ dbmigrate.prototype = {
     }
 
     return Promise.resolve(executeDown(this.internals, this.config)).asCallback(
-      callback
+      callback,
     );
   },
 
@@ -266,7 +266,7 @@ dbmigrate.prototype = {
     }
 
     return Promise.resolve(executeFix(this.internals, this.config)).nodeify(
-      callback
+      callback,
     );
   },
 
@@ -289,7 +289,7 @@ dbmigrate.prototype = {
     }
 
     return Promise.resolve(
-      executeCheck(this.internals, this.config)
+      executeCheck(this.internals, this.config),
     ).asCallback(callback);
   },
 
@@ -315,7 +315,7 @@ dbmigrate.prototype = {
     }
 
     return Promise.resolve(executeSync(this.internals, this.config)).asCallback(
-      callback
+      callback,
     );
   },
 
@@ -334,7 +334,7 @@ dbmigrate.prototype = {
 
     this.internals.argv.count = Number.MAX_VALUE;
     return Promise.resolve(executeDown(this.internals, this.config)).asCallback(
-      callback
+      callback,
     );
   },
 
@@ -359,7 +359,7 @@ dbmigrate.prototype = {
 
     this.internals.argv._.unshift(migrationName);
     return Promise.resolve(
-      executeCreateMigration(this.internals, this.config)
+      executeCreateMigration(this.internals, this.config),
     ).asCallback(callback);
   },
 
@@ -371,7 +371,7 @@ dbmigrate.prototype = {
     this.internals.argv._.push(dbname);
     this.internals.mode = 'create';
     return Promise.resolve(executeDB(this.internals, this.config)).asCallback(
-      callback
+      callback,
     );
   },
 
@@ -383,7 +383,7 @@ dbmigrate.prototype = {
     this.internals.argv._.push(dbname);
     this.internals.mode = 'drop';
     return Promise.resolve(executeDB(this.internals, this.config)).asCallback(
-      callback
+      callback,
     );
   },
 
@@ -424,7 +424,7 @@ dbmigrate.prototype = {
 
     this.internals.mode = mode || 'vc';
     return Promise.resolve(executeSeed(this.internals, this.config)).asCallback(
-      callback
+      callback,
     );
   },
 
@@ -448,7 +448,7 @@ dbmigrate.prototype = {
     }
 
     return Promise.resolve(
-      executeUndoSeed(this.internals, this.config)
+      executeUndoSeed(this.internals, this.config),
     ).asCallback(callback);
   },
 
@@ -473,7 +473,7 @@ dbmigrate.prototype = {
 
     this.internals.argv.count = Number.MAX_VALUE;
     return Promise.resolve(
-      executeUndoSeed(this.internals, this.config)
+      executeUndoSeed(this.internals, this.config),
     ).asCallback(callback);
   },
 
@@ -482,7 +482,7 @@ dbmigrate.prototype = {
    */
   run: function () {
     load('run')(this.internals, this.config);
-  }
+  },
 };
 
 module.exports = dbmigrate;
